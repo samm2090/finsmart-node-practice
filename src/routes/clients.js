@@ -3,7 +3,7 @@ const router = express.Router();
 
 const connection = require('../database');
 
-router.get('/', (req, res) => {
+router.get('/clients', (req, res) => {
   connection.query('select * from client', (err, rows, fields) => {
     if (!err) {
       res.json(rows);
@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/client/:id', (req, res) => {
   const {
     id
   } = req.params;
@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-router.post('/', (req, res) => {
+router.post('/client', (req, res) => {
   const {
     id,
     name,
@@ -47,7 +47,7 @@ router.post('/', (req, res) => {
   });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/client/:id', (req, res) => {
   const {
     name,
     lastName
@@ -71,7 +71,7 @@ router.put('/:id', (req, res) => {
 
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/client/:id', (req, res) => {
   const query = `delete from client where id=?`;
 
   const {
