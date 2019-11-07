@@ -1,9 +1,10 @@
 const express = require('express');
+const connection = require('../database');
+const tokenVerification = require('../security/tokenVerification');
+
 const router = express.Router();
 
-const connection = require('../database');
-
-router.get('/clients', (req, res) => {
+router.get('/clients', tokenVerification,(req, res) => {
   connection.query('select * from client', (err, rows, fields) => {
     if (!err) {
       res.json(rows);
@@ -13,7 +14,7 @@ router.get('/clients', (req, res) => {
   });
 });
 
-router.get('/client/:id', (req, res) => {
+router.get('/client/:id', tokenVerification,(req, res) => {
   const {
     id
   } = req.params;
@@ -26,7 +27,7 @@ router.get('/client/:id', (req, res) => {
   });
 });
 
-router.post('/client', (req, res) => {
+router.post('/client', tokenVerification,(req, res) => {
   const {
     id,
     name,
@@ -47,7 +48,7 @@ router.post('/client', (req, res) => {
   });
 });
 
-router.put('/client/:id', (req, res) => {
+router.put('/client/:id',tokenVerification, (req, res) => {
   const {
     name,
     lastName
@@ -71,7 +72,7 @@ router.put('/client/:id', (req, res) => {
 
 });
 
-router.delete('/client/:id', (req, res) => {
+router.delete('/client/:id',tokenVerification, (req, res) => {
   const query = `delete from client where id=?`;
 
   const {

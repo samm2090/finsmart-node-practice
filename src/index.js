@@ -11,6 +11,7 @@ app.use(express.json());
 
 //routes
 app.use(require('./routes/clients.js'));
+app.use(require('./routes/users.js'));
 
 //start Server
 app.listen(app.get('port'), ()=>{
