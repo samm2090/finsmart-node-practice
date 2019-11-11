@@ -4,7 +4,7 @@ const tokenVerification = require('../security/tokenVerification');
 
 const router = express.Router();
 
-router.get('/clients', tokenVerification,(req, res) => {
+router.get('/clients', (req, res) => {
   connection.query('select * from client', (err, rows, fields) => {
     if (!err) {
       res.json(rows);
@@ -14,7 +14,7 @@ router.get('/clients', tokenVerification,(req, res) => {
   });
 });
 
-router.get('/client/:id', tokenVerification,(req, res) => {
+router.get('/client/:id', (req, res) => {
   const {
     id
   } = req.params;
@@ -27,17 +27,21 @@ router.get('/client/:id', tokenVerification,(req, res) => {
   });
 });
 
-router.post('/client', tokenVerification,(req, res) => {
+router.post('/client', (req, res) => {
   const {
-    id,
     name,
     lastName
   } = req.body;
+
   const query = `
-    CALL createClientOrEdit(?, ?, ?);
+    insert into client(name, last_name) values(?, ?);
   `;
 
-  connection.query(query, [id, name, lastName], (err, rows, fields) => {
+  // const query = `
+  //   CALL createClientOrEdit(?, ?, ?);
+  // `;
+
+  connection.query(query, [name, lastName], (err, rows, fields) => {
     if (!err) {
       res.json({
         status: 'New client saved'
@@ -48,7 +52,7 @@ router.post('/client', tokenVerification,(req, res) => {
   });
 });
 
-router.put('/client/:id',tokenVerification, (req, res) => {
+router.put('/client/:id', (req, res) => {
   const {
     name,
     lastName
@@ -72,17 +76,19 @@ router.put('/client/:id',tokenVerification, (req, res) => {
 
 });
 
-router.delete('/client/:id',tokenVerification, (req, res) => {
+router.delete('/client/:id', (req, res) => {
   const query = `delete from client where id=?`;
 
   const {
     id
   } = req.params;
 
-  connection.query(query,[id], (err, rows, filds) =>{
-    if(!err){
-      res.json({status:'Client deleted'});
-    }else{
+  connection.query(query, [id], (err, rows, filds) => {
+    if (!err) {
+      res.json({
+        status: 'Client deleted'
+      });
+    } else {
       console.log(err);
     }
   });
